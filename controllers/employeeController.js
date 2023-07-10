@@ -9,6 +9,7 @@ const Department = db.department;
 const Employee = db.employee;
 const Workstate = db.workstate;
 const Address = db.address;
+const Role = db.role;
 
 const fetchGenderRatio = async (req, res) => {
   try {
@@ -28,10 +29,7 @@ const fetchGenderRatio = async (req, res) => {
     });
 
     console.log(maleRows);
-    // const count = +male + +female;
 
-    // const males = (male / count) * 100;
-    // const females = (female / count) * 100;
 
     res.status(200).json([
       { id: 1, label: "male", value: male },
@@ -49,8 +47,8 @@ const registerEmployee = async (req, res) => {
     });
 
     if (validate1) {
-      res.status(401).json({ message: "User already exists." });
-      return;
+      return res.status(400).json({ message: "Email ID already used." });
+
     }
 
     const data = await Employee.create(req.body);
@@ -76,7 +74,12 @@ const loginEmployee = async (req, res) => {
 
     const employee = await Employee.findOne({
       where: { email: email },
+
+      include: [{ model: Department, as: "department" }, { model: Workstate, as: "workstate" }, { model: Address, as: "addresses" }]
+
     });
+
+
 
     if (!employee) {
       res.status(400).json({ message: "User does not exists." });
@@ -97,10 +100,15 @@ const loginEmployee = async (req, res) => {
       httpOnly: true,
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     };
+
+    employee.role = `${employee.roleId === 2 ? 'admin' : 'employee'}`
+    console.log(employee.role);
+
     res
       .status(200)
       .cookie("token", token, options)
-      .json({ message: "Signed In." });
+      .json({ message: "Signed In.", user: employee })
+    // .json({ message: "Signed In.", user: { firstName: `${employee.firstName}`, lastName: `${employee.lastName}`, role: `${employee.roleId === 2 ? 'admin' : 'employee'}`, email: `${employee.email}`, gender: `${employee.gender}`, dob: `${employee.dob}`, doj: `${employee.doj}`, phone: `${employee.phone}`, department: `${employee.deptId}`, workStatus: `${employee.wstId}` }, });
   } catch (error) {
     res.status(500).json({ message: error });
   }
@@ -118,11 +126,15 @@ const updateProfile = async (req, res) => {
   try {
     const { current, permanent, id, ...employeePayload } = req.body;
 
-    await Employee.update(
+    const updatedEmployee = await Employee.update(
       {
         ...employeePayload,
       },
-      { where: { id: id } }
+      { where: { id: id } },
+      // {
+      //   include: [{ model: Department, as: "department" }, { model: Workstate, as: "workstate" }, { model: Address, as: "addresses" }]
+      // }
+
     );
 
     const addressExists = await Address.findAll({
@@ -160,6 +172,14 @@ const updateProfile = async (req, res) => {
         ));
     }
 
+    if (!!updatedEmployee) {
+      var user = await Employee.findOne({
+        where: { id: id },
+        attributes: { exclude: ['password'] },
+        include: [{ model: Department, as: "department" }, { model: Workstate, as: "workstate" }, { model: Address, as: "addresses" }, { model: Role }]
+      })
+    }
+
     // const data = await Address.create(
     //   {
     //     street,
@@ -185,9 +205,9 @@ const updateProfile = async (req, res) => {
     //   }
     // );
 
-    res.status(200).json({ message: "Profile updated." });
+    res.status(200).json({ message: "Profile updated.", user: user });
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(500).json({ message: error.message });
   }
 };
 

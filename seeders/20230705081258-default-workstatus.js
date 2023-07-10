@@ -5,12 +5,12 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert("workstates", [
       {
-        workState: "WFO",
+        workState: "Work From Office",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        workState: "WFH",
+        workState: "Work From Home",
         createdAt: new Date(),
         updatedAt: new Date(),
       },

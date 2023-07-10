@@ -9,6 +9,7 @@ const adminRoutes = require("./routes/admin");
 
 const app = express();
 app.use(bodyParser.json());
+app.use(express.json())
 app.use(cookieParser());
 
 app.use("/departments", departmentRoutes);
