@@ -18,7 +18,7 @@ const adminUpdateProfile = async (req, res) => {
     const addressExists = await Address.findAll({
       where: { empID: id },
     });
-    console.log("adbksd");
+
 
     if (addressExists.length === 0) {
       //create new address.

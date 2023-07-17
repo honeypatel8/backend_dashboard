@@ -50,6 +50,7 @@ module.exports = {
         references: {
           model: "roles",
         },
+        defaultValue: 1
       },
       deletedAt: {
         allowNull: true,

@@ -76,6 +76,13 @@ const loginEmployee = async (req, res) => {
         { model: Address, as: "addresses" },
         { model: Role },
       ],
+      where: { email: email },
+
+      include: [
+        { model: Department, as: "department" },
+        { model: Workstate, as: "workstate" },
+        { model: Address, as: "addresses" },
+      ],
     });
 
     if (!employee) {
@@ -104,6 +111,8 @@ const loginEmployee = async (req, res) => {
     employee.role = `${employee.roleId === 2 ? "Admin" : "Employee"}`;
     console.log(employee);
     const { password, ...employeeData } = employee.toJSON();
+    // employee.role = `${employee.roleId === 2 ? 'admin' : 'employee'}`
+    // console.log(employee.role);
 
     res
       .status(200)
@@ -213,7 +222,7 @@ const updateProfile = async (req, res) => {
 
     res.status(200).json({ message: "Profile updated.", user: user });
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(500).json({ message: error.message });
   }
 };
 

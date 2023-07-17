@@ -3,7 +3,7 @@ const { Model } = require("sequelize");
 const bcrypt = require("bcrypt");
 module.exports = (sequelize, DataTypes) => {
   class Employee extends Model {
-    static associate(models) {}
+    static associate(models) { }
   }
   Employee.init(
     {
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       phone: DataTypes.INTEGER,
       deptId: { type: DataTypes.INTEGER, references: { model: "departments" } },
       wstId: { type: DataTypes.INTEGER, references: { model: "workstates" } },
-      roleId: { type: DataTypes.INTEGER, references: { model: "roles" } },
+      roleId: { type: DataTypes.INTEGER, references: { model: "roles" }, defaultValue: 1 },
     },
     {
       paranoid: true,
