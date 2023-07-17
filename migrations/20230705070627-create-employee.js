@@ -51,6 +51,10 @@ module.exports = {
           model: "roles",
         },
       },
+      deletedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

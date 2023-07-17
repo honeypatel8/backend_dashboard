@@ -52,8 +52,11 @@ db.department = require("./department")(sequelize, DataTypes);
 db.workstate = require("./workstate")(sequelize, DataTypes);
 db.role = require("./role")(sequelize, DataTypes);
 
-db.employee.hasMany(db.address, { foreignKey: "empId", as: "addresses" });
-db.empAddBind = db.address.belongsTo(db.employee, {
+db.employee.hasMany(db.address, {
+  foreignKey: "empId",
+  as: "addresses",
+});
+db.address.belongsTo(db.employee, {
   foreignKey: "empId",
   as: "employee",
 });

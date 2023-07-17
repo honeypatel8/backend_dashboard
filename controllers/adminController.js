@@ -7,6 +7,7 @@ const adminUpdateProfile = async (req, res) => {
   try {
     const { current, permanent, id, ...employeePayload } = req.body;
 
+    console.log(id);
     await Employee.update(
       {
         ...employeePayload,

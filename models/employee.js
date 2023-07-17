@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       roleId: { type: DataTypes.INTEGER, references: { model: "roles" } },
     },
     {
+      paranoid: true,
       sequelize,
       modelName: "Employee",
     }

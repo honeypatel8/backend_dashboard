@@ -28,5 +28,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Address",
     }
   );
+
   return Address;
 };

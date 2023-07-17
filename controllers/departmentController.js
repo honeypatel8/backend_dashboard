@@ -8,11 +8,11 @@ const Role = db.role;
 const fetchDepartments = async (req, res) => {
   try {
     const departments = await Department.findAll({
-      include: {
-        model: Employee,
-        attributes: ["id", "firstName"],
-      },
-      // attributes: ["departmentName"],
+      // include: {
+      //   model: Employee,
+      //   attributes: ["id", "firstName"],
+      // },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
     });
     // const departments = await Role.findAll({
     //   include: [Employee],

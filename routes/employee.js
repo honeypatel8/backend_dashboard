@@ -6,6 +6,9 @@ const {
   logoutEmployee,
   updateProfile,
   fetchBirthDay,
+  fetchAllEmployees,
+  deleteEmployee,
+  fetchFullLeaves,
 } = require("../controllers/employeeController");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
@@ -17,5 +20,8 @@ routes.post("/register", registerEmployee);
 routes.post("/login", loginEmployee);
 routes.post("/logout", logoutEmployee);
 routes.get("/birthday", fetchBirthDay);
+routes.get("/fullleave", fetchFullLeaves);
+routes.get("/", fetchAllEmployees);
+routes.post("/delete", deleteEmployee);
 
 module.exports = routes;
